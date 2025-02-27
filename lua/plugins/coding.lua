@@ -11,6 +11,7 @@ return {
   },
   {
     "zbirenbaum/copilot.lua",
+    enabled = false,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
@@ -33,6 +34,7 @@ return {
   { "echasnovski/mini.pairs", enabled = false },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
+    enabled = false,
     opts = function()
       return {
         context = { "buffer" },
