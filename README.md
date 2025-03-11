@@ -13,6 +13,9 @@
 ### 代码补全
 ![代码补全](./res/cmp.png)
 
+### LazyGit 集成
+![LazyGit](./res/lazygit.png)
+
 ## 主要特性
 
 - 基于 [LazyVim](https://github.com/LazyVim/LazyVim) 构建的现代化配置
@@ -20,6 +23,7 @@
 - 美观的界面主题：支持 Tokyo Night 和 Catppuccin 主题
 - 智能的代码补全和 LSP 集成
 - 中文输入法自动切换支持 (使用自定义的 yasi.nvim 插件)
+- LazyGit 集成，提供强大的 Git 操作界面
 
 ## 插件亮点
 
