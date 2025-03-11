@@ -11,6 +11,12 @@ return {
       window = {
         mappings = {
           ["o"] = "open",
+          ["Y"] = function(state)
+            local node = state.tree:get_node()
+            local filename = node.name
+            vim.fn.setreg("+", filename)
+            vim.notify('Copied: ' .. filename)
+          end,
         },
       },
     },
