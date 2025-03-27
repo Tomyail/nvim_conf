@@ -6,12 +6,18 @@ return {
         ["<C-k>"] = { "select_prev", "fallback" },
         ["<C-j>"] = { "select_next", "fallback" },
       },
+      completion = {
+        list = {
+          selection = {
+            preselect = false,
+          },
+        },
+      },
     },
   },
   {
     enabled = false,
     "zbirenbaum/copilot.lua",
-    enabled = false,
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
@@ -48,4 +54,3 @@ return {
     end,
   },
 }
-
