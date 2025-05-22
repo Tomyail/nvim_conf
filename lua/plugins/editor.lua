@@ -15,7 +15,7 @@ return {
             local node = state.tree:get_node()
             local filename = node.name
             vim.fn.setreg("+", filename)
-            vim.notify('Copied: ' .. filename)
+            vim.notify("Copied: " .. filename)
           end,
         },
       },
@@ -43,7 +43,7 @@ return {
           local node = tree:get_node()
           local dir = node.type == "file" and node:get_parent_id() or node:get_id()
 
-          local fzf = require('fzf-lua')
+          local fzf = require("fzf-lua")
           fzf.live_grep({ cwd = dir })
         end,
         desc = "grep",
@@ -60,7 +60,7 @@ return {
           local node = tree:get_node()
           local dir = node.type == "file" and node:get_parent_id() or node:get_id()
 
-          local fzf = require('fzf-lua')
+          local fzf = require("fzf-lua")
           fzf.files({ cwd = dir })
         end,
         desc = "find",
@@ -365,5 +365,40 @@ return {
         desc = "Create a selection for selected text or word under the cursor",
       },
     },
+  },
+  {
+    -- 给chezmoi 配置目录下面的文件自动加高亮
+    "alker0/chezmoi.vim",
+    lazy = false,
+    init = function()
+      -- This option is required.
+      vim.g["chezmoi#use_tmp_buffer"] = true
+      -- add other options here if needed.
+    end,
+  },
+  {
+    -- chezmoi 目录的文件变更后，自动同步到目标目录
+    "xvzc/chezmoi.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("chezmoi").setup({
+        edit = {
+          watch = true,
+          force = true,
+        },
+      })
+    end,
+    init = function()
+      vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = { os.getenv("HOME") .. "/.local/share/chezmoi/*" },
+        callback = function(ev)
+          local bufnr = ev.buf
+          local edit_watch = function()
+            require("chezmoi.commands.__edit").watch(bufnr)
+          end
+          vim.schedule(edit_watch)
+        end,
+      })
+    end,
   },
 }
