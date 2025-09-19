@@ -37,7 +37,7 @@ return {
       })
     end,
   },
-  { "echasnovski/mini.pairs", enabled = false },
+  -- { "nvim-mini/mini.pairs", enabled = false },
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     enabled = false,
