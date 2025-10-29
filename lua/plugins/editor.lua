@@ -14,8 +14,27 @@ return {
           ["Y"] = function(state)
             local node = state.tree:get_node()
             local filename = node.name
-            vim.fn.setreg("+", filename)
-            vim.notify("Copied: " .. filename)
+            local path = node:get_id()
+
+            local relative_path = vim.fn.fnamemodify(path, ":.")
+
+            vim.ui.select({"filename only", "full path", "relative path"}, {
+              prompt = "Copy to clipboard:",
+              format_item = function(item)
+                return item:sub(1,1):upper() .. item:sub(2)
+              end
+            }, function(choice)
+              if choice == "filename only" then
+                vim.fn.setreg("+", filename)
+                vim.notify("Copied filename: " .. filename)
+              elseif choice == "full path" then
+                vim.fn.setreg("+", path)
+                vim.notify("Copied full path: " .. path)
+              elseif choice == "relative path" then
+                vim.fn.setreg("+", relative_path)
+                vim.notify("Copied relative path: " .. relative_path)
+              end
+            end)
           end,
         },
       },
