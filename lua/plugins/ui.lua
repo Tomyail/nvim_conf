@@ -85,7 +85,7 @@ return {
       opts.options.right = opts.options.right or {}
       -- Use ~35% of the editor width so claude.nvim can render without wrapping
       opts.options.right.size = function()
-        return math.floor(vim.o.columns * 0.35)
+        return math.floor(vim.o.columns * 0.3)
       end
     end,
   },
