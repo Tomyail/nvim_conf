@@ -81,12 +81,12 @@ return {
     "folke/edgy.nvim",
     optional = true,
     opts = function(_, opts)
-      opts.right = opts.right or {}
-      table.insert(opts.right, {
-        ft = "copilot-chat",
-        title = "Copilot Chat",
-        size = { width = 20 },
-      })
+      opts.options = opts.options or {}
+      opts.options.right = opts.options.right or {}
+      -- Use ~35% of the editor width so claude.nvim can render without wrapping
+      opts.options.right.size = function()
+        return math.floor(vim.o.columns * 0.35)
+      end
     end,
   },
 }
