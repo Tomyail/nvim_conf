@@ -50,7 +50,6 @@
   "smart-splits.nvim": { "branch": "master", "commit": "07f9614f5b9405392d3b22fca9f51a9857f2d9b3" },
   "snacks.nvim": { "branch": "main", "commit": "6ca541747c09962f87fc42b858249e4f9d2bbf2d" },
   "todo-comments.nvim": { "branch": "main", "commit": "411503d3bedeff88484de572f2509c248e499b38" },
-  "toggleterm.nvim": { "branch": "main", "commit": "50ea089fc548917cc3cc16b46a8211833b9e3c7c" },
   "tokyonight.nvim": { "branch": "main", "commit": "2642dbb83333e0575d1c3436e1d837926871c5fb" },
   "trouble.nvim": { "branch": "main", "commit": "d7494d8bc563f8ae8b3f35d78c7478cf842b0ab9" },
   "ts-comments.nvim": { "branch": "main", "commit": "123a9fb12e7229342f807ec9e6de478b1102b041" },
