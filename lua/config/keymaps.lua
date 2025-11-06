@@ -21,3 +21,4 @@ map("n", "<leader>F", ":lua require('fzf-lua').live_grep()<CR>")
 map("n", "<leader>oo", create_file_in_directory,{desc = "Create a new file in the quick note directory"})
 
 map("i", "jk", "<ESC>", { desc = "Exit insert mode" })
+map({"n","x"}, "<C-c>", '"+y', { desc = "Copy to clipboard" })
