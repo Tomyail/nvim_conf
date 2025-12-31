@@ -41,6 +41,14 @@ return {
           height = 0.4,
         },
       },
+      lazygit = {
+        win = {
+          position = "float",
+          backdrop = 60,
+          height = 0.9,
+          width = 0.9,
+        },
+      },
     },
     keys = {
       { "<leader>t", desc = "+Terminal" },
