@@ -33,6 +33,7 @@ return {
         },
         },
       },
+      image = {},
       terminal = {
         enabled = true,
         win = {
