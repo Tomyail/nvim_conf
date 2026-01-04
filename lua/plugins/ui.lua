@@ -96,6 +96,9 @@ return {
       opts.options.right.size = function()
         return math.floor(vim.o.columns * 0.3)
       end
+      -- Set Neo-tree (left sidebar) default width
+      opts.options.left = opts.options.left or {}
+      opts.options.left.size = 40
     end,
   },
 }
