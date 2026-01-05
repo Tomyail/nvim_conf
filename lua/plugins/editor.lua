@@ -41,7 +41,32 @@ return {
     },
     keys = {
       { "<leader>e", desc = "+Neotree" },
-      { "<leader>ee", "<cmd>Neotree filesystem toggle<cr>", desc = "Toggle" },
+      {
+        "<leader>ee",
+        function()
+          local manager = require("neo-tree.sources.manager")
+          local renderer = require("neo-tree.ui.renderer")
+          local sources = { "filesystem", "buffers", "git_status" }
+          local last_open_source = nil
+
+          -- 检查是否有任何 Neo-tree 窗口打开，并记录最后打开的 source
+          for _, source in ipairs(sources) do
+            local state = manager.get_state(source)
+            if state and renderer.window_exists(state) then
+              last_open_source = source
+            end
+          end
+
+          if last_open_source then
+            -- 关闭所有 Neo-tree 窗口
+            manager.close_all()
+          else
+            -- 没有打开的，使用命令的 last source 功能，会恢复上次的 source
+            require("neo-tree.command").execute({ source = "last", toggle = true })
+          end
+        end,
+        desc = "Toggle all Neotree",
+      },
       {
         "<leader>ef",
         function()
