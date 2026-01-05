@@ -60,7 +60,7 @@ return {
             "prettierd",
             "injected",
             "autocorrect",
-            "markdownlint-cli2",
+            -- "markdownlint-cli2",
           },
         },
       }
