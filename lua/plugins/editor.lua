@@ -1,3 +1,15 @@
+local function focus_neotree_git_status()
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    local buf = vim.api.nvim_win_get_buf(win)
+    if vim.bo[buf].filetype == "neo-tree" and vim.b[buf].neo_tree_source == "git_status" then
+      vim.api.nvim_set_current_win(win)
+      return true
+    end
+  end
+
+  return false
+end
+
 return {
   -- override default plguns
   {
@@ -163,7 +175,14 @@ return {
       "TmuxNavigatePrevious",
     },
     keys = {
-      { "<c-h>", "<cmd><C-U>TmuxNavigateLeft<cr>" },
+      {
+        "<c-h>",
+        function()
+          if not focus_neotree_git_status() then
+            vim.cmd("TmuxNavigateLeft")
+          end
+        end,
+      },
       { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
       { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
       { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
@@ -179,7 +198,9 @@ return {
       {
         "<c-h>",
         function()
-          require("smart-splits").move_cursor_left()
+          if not focus_neotree_git_status() then
+            require("smart-splits").move_cursor_left()
+          end
         end,
       },
       {
