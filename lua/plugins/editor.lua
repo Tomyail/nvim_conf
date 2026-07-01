@@ -164,7 +164,74 @@ return {
   {
     "christoomey/vim-tmux-navigator",
     enabled = function()
-      return vim.fn.getenv("TERM_PROGRAM") == "tmux"
+      return true
+      -- return vim.fn.getenv("TERM_PROGRAM") == "tmux"
+    end,
+    init = function()
+      vim.g.tmux_navigator_no_mappings = 1
+    end,
+    config = function()
+      -- Based on https://github.com/paulbkim-dev/vim-herdr-navigation/blob/main/editor/nvim.lua
+      local function nav(wincmd, dir, tmux_command)
+        local prev = vim.api.nvim_get_current_win()
+        vim.cmd("wincmd " .. wincmd)
+
+        if vim.api.nvim_get_current_win() ~= prev then
+          return
+        end
+
+        if vim.env.HERDR_PANE_ID and vim.env.HERDR_PANE_ID ~= "" then
+          local herdr = vim.env.HERDR_BIN_PATH
+          if not herdr or herdr == "" then
+            herdr = "herdr"
+          end
+
+          vim.fn.system({ herdr, "pane", "focus", "--direction", dir, "--current" })
+          return
+        end
+
+        if vim.env.TMUX and vim.env.TMUX ~= "" then
+          pcall(vim.cmd, tmux_command)
+        end
+      end
+
+      local function set_nav_keymaps()
+        vim.keymap.set("n", "<c-h>", function()
+          if not focus_neotree_git_status() then
+            nav("h", "left", "TmuxNavigateLeft")
+          end
+        end, { silent = true, noremap = true, desc = "Navigate left (vim/herdr/tmux)" })
+
+        vim.keymap.set("n", "<c-j>", function()
+          nav("j", "down", "TmuxNavigateDown")
+        end, { silent = true, noremap = true, desc = "Navigate down (vim/herdr/tmux)" })
+
+        vim.keymap.set("n", "<c-k>", function()
+          nav("k", "up", "TmuxNavigateUp")
+        end, { silent = true, noremap = true, desc = "Navigate up (vim/herdr/tmux)" })
+
+        vim.keymap.set("n", "<c-l>", function()
+          nav("l", "right", "TmuxNavigateRight")
+        end, { silent = true, noremap = true, desc = "Navigate right (vim/herdr/tmux)" })
+
+        vim.keymap.set("n", "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>", {
+          silent = true,
+          desc = "Tmux Navigate Previous",
+        })
+      end
+
+      set_nav_keymaps()
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "VeryLazy",
+        callback = set_nav_keymaps,
+      })
+
+      if vim.env.TMUX then
+        vim.keymap.set("t", "<c-h>", [[<C-\><C-N><cmd><C-U>TmuxNavigateLeft<cr>]], { silent = true })
+        vim.keymap.set("t", "<c-j>", [[<C-\><C-N><cmd><C-U>TmuxNavigateDown<cr>]], { silent = true })
+        vim.keymap.set("t", "<c-k>", [[<C-\><C-N><cmd><C-U>TmuxNavigateUp<cr>]], { silent = true })
+        vim.keymap.set("t", "<c-l>", [[<C-\><C-N><cmd><C-U>TmuxNavigateRight<cr>]], { silent = true })
+      end
     end,
     lazy = false,
     cmd = {
@@ -174,25 +241,11 @@ return {
       "TmuxNavigateRight",
       "TmuxNavigatePrevious",
     },
-    keys = {
-      {
-        "<c-h>",
-        function()
-          if not focus_neotree_git_status() then
-            vim.cmd("TmuxNavigateLeft")
-          end
-        end,
-      },
-      { "<c-j>", "<cmd><C-U>TmuxNavigateDown<cr>" },
-      { "<c-k>", "<cmd><C-U>TmuxNavigateUp<cr>" },
-      { "<c-l>", "<cmd><C-U>TmuxNavigateRight<cr>" },
-      { "<c-\\>", "<cmd><C-U>TmuxNavigatePrevious<cr>" },
-    },
   },
   {
     "mrjones2014/smart-splits.nvim",
     enabled = function()
-      return vim.fn.getenv("TERM_PROGRAM") == "WezTerm"
+      return vim.env.TERM_PROGRAM == "WezTerm" and not vim.env.TMUX and not vim.env.HERDR_PANE_ID
     end,
     keys = {
       {
