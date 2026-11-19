@@ -129,6 +129,42 @@ return {
       current_line_blame = true,
     },
   },
+  {
+    -- Inline "always on" diff overlay for the current buffer.
+    -- Runs alongside gitsigns: gitsigns keeps the signs + blame, mini.diff only
+    -- paints line numbers and the toggleable overlay, so no keymap clashes.
+    "nvim-mini/mini.diff",
+    version = false,
+    event = "VeryLazy",
+    keys = {
+      {
+        "<leader>gv",
+        function()
+          require("mini.diff").toggle_overlay(0)
+        end,
+        desc = "Toggle diff overlay (all hunks of buffer)",
+      },
+      {
+        "<leader>gV",
+        function()
+          require("mini.diff").toggle(0)
+        end,
+        desc = "Toggle diff for buffer",
+      },
+    },
+    opts = {
+      view = { style = "number" },
+      mappings = {
+        apply = "",
+        reset = "",
+        textobject = "",
+        goto_first = "",
+        goto_prev = "",
+        goto_next = "",
+        goto_last = "",
+      },
+    },
+  },
 
   -- below are custom plugin
   {
