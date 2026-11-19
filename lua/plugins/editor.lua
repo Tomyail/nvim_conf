@@ -17,6 +17,9 @@ return {
     opts = {
       -- https://github.com/nvim-neo-tree/neo-tree.nvim/issues/1365
       auto_clean_after_session_restore = true,
+      -- git_round is a local source (lua/neo-tree/sources/git_round/init.lua)
+      -- showing only worktree-vs-index + untracked files.
+      sources = { "filesystem", "buffers", "git_status", "git_round" },
       filesystem = {
         follow_current_file = { enabled = false, leave_dirs_open = true },
       },
@@ -58,7 +61,7 @@ return {
         function()
           local manager = require("neo-tree.sources.manager")
           local renderer = require("neo-tree.ui.renderer")
-          local sources = { "filesystem", "buffers", "git_status" }
+          local sources = { "filesystem", "buffers", "git_status", "git_round" }
           local last_open_source = nil
 
           -- 检查是否有任何 Neo-tree 窗口打开，并记录最后打开的 source
@@ -78,6 +81,13 @@ return {
           end
         end,
         desc = "Toggle all Neotree",
+      },
+      {
+        "<leader>er",
+        function()
+          require("neo-tree.command").execute({ source = "git_round", position = "left", toggle = true })
+        end,
+        desc = "Review this round (unstaged tree)",
       },
       {
         "<leader>ef",
