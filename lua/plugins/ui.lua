@@ -53,6 +53,43 @@ return {
     },
     keys = {
       { "<leader>t", desc = "+Terminal" },
+      {
+        "<leader>gu",
+        function()
+          Snacks.picker.git_diff({ staged = false, group = true, title = "本轮改动 · 未暂存 (vs 暂存区)" })
+        end,
+        desc = "Unstaged files (this round)",
+      },
+      {
+        "<leader>gi",
+        function()
+          Snacks.picker.git_diff({ staged = true, group = true, title = "上一轮改动 · 已暂存 (vs HEAD)" })
+        end,
+        desc = "Staged files (previous round)",
+      },
+      {
+        "<leader>gn",
+        function()
+          Snacks.picker.pick({
+            title = "未跟踪的新文件（本轮新建）",
+            format = "file",
+            preview = "file",
+            confirm = "edit",
+            finder = function(_, ctx)
+              local cwd = ctx:git_root()
+              local out = vim.fn.systemlist({ "git", "-C", cwd, "ls-files", "--others", "--exclude-standard" })
+              local items = {}
+              for _, file in ipairs(out) do
+                if file ~= "" then
+                  items[#items + 1] = { text = file, file = file, cwd = cwd }
+                end
+              end
+              return items
+            end,
+          })
+        end,
+        desc = "Untracked new files",
+      },
       { "<leader>tt", function() Snacks.terminal.toggle() end, desc = "Toggle Terminal" },
       { "<leader>t1", function() Snacks.terminal.toggle(nil, { win = { style = "toggleterm" } }) end, desc = "Terminal 1" },
       { "<leader>t2", function() Snacks.terminal.toggle(nil, { win = { style = "toggleterm" } }) end, desc = "Terminal 2" },
